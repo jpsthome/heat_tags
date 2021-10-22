@@ -1,7 +1,7 @@
 defmodule HeatTagsWeb.MessagesController do
   use HeatTagsWeb, :controller
 
-  alias HeatTags.Messages
+  alias HeatTags.Message
   alias HeatTags.Messages.Create
 
   def create(conn, params) do
@@ -16,6 +16,10 @@ defmodule HeatTagsWeb.MessagesController do
     |> render("create.json", message: message)
   end
 
-  defp handle_create({:error, %Message{}}, %{result: result, status: status}, conn) do
+  defp handle_create({:error, %{result: result, status: status}}, conn) do
+    conn
+    |> put_status(status)
+    |> put_view(HeatTagsWeb.ErrorView)
+    |> render("error.json", result: result)
   end
 end
